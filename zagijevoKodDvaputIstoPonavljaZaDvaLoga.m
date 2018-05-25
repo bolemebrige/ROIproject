@@ -1,30 +1,5 @@
 function varargout = zagijevoKodDvaputIstoPonavljaZaDvaLoga(varargin)
-% ZAGIJEVOKODDVAPUTISTOPONAVLJAZADVALOGA MATLAB code for zagijevoKodDvaputIstoPonavljaZaDvaLoga.fig
-%      ZAGIJEVOKODDVAPUTISTOPONAVLJAZADVALOGA, by itself, creates a new ZAGIJEVOKODDVAPUTISTOPONAVLJAZADVALOGA or raises the existing
-%      singleton*.
-%
-%      H = ZAGIJEVOKODDVAPUTISTOPONAVLJAZADVALOGA returns the handle to a new ZAGIJEVOKODDVAPUTISTOPONAVLJAZADVALOGA or the handle to
-%      the existing singleton*.
-%
-%      ZAGIJEVOKODDVAPUTISTOPONAVLJAZADVALOGA('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in ZAGIJEVOKODDVAPUTISTOPONAVLJAZADVALOGA.M with the given input arguments.
-%
-%      ZAGIJEVOKODDVAPUTISTOPONAVLJAZADVALOGA('Property','Value',...) creates a new ZAGIJEVOKODDVAPUTISTOPONAVLJAZADVALOGA or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before zagijevoKodDvaputIstoPonavljaZaDvaLoga_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to zagijevoKodDvaputIstoPonavljaZaDvaLoga_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help zagijevoKodDvaputIstoPonavljaZaDvaLoga
-
-% Last Modified by GUIDE v2.5 23-May-2018 22:56:46
-
-% Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
@@ -46,11 +21,6 @@ end
 
 % --- Executes just before zagijevoKodDvaputIstoPonavljaZaDvaLoga is made visible.
 function zagijevoKodDvaputIstoPonavljaZaDvaLoga_OpeningFcn(hObject, eventdata, handles, varargin)
-% This function has no output args, see OutputFcn.
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to zagijevoKodDvaputIstoPonavljaZaDvaLoga (see VARARGIN)
 
 % Choose default command line output for zagijevoKodDvaputIstoPonavljaZaDvaLoga
 handles.output = hObject;
@@ -58,31 +28,23 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes zagijevoKodDvaputIstoPonavljaZaDvaLoga wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
 function varargout = zagijevoKodDvaputIstoPonavljaZaDvaLoga_OutputFcn(hObject, eventdata, handles) 
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 %################################################################################################################
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 [File_Name, Path_Name] = uigetfile('*.PNG');
 J = imread(fullfile(Path_Name, File_Name));
 guidata(hObject,handles); 
 imshow(J);
 
-Igray = rgb2gray(J); %(Convert an Image to Gray)
+Igray = rgb2gray(J); 
 [rows cols] = size(Igray);
 Idilate = Igray; %% Dilate and Erode Image in order to remove noise
 for i = 1:rows
@@ -125,13 +87,7 @@ end
 total_sum = total_sum + sum;
 end
 average = total_sum / cols;
-% figure(4);
-% % Plot the Histogram for analysis
-% subplot(3,1,1);
-% plot (horz1);
-% title('Horizontal Edge Processing Histogram');
-% xlabel('Column Number ->');
-% ylabel('Difference ->');
+
 %% Smoothen the Horizontal Histogram by applying Low Pass Filter
 sum = 0;
 horz = horz1;
@@ -142,11 +98,7 @@ sum = sum + horz1(j);
 end
 horz(i) = sum / 41;
 end
-% subplot(3,1,2);
-% plot (horz);
-% title('Histogram after passing through Low Pass Filter');
-% xlabel('Column Number ->');
-% ylabel('Difference ->');
+
 %% Filter out Horizontal Histogram Values by applying Dynamic Threshold
 disp('Filter out Horizontal Histogram...');
 for i = 1:cols
@@ -157,11 +109,7 @@ I(j, i) = 0;
 end
 end
 end
-% subplot(3,1,3);
-% plot (horz);
-% title('Histogram after Filtering');
-% xlabel('Column Number ->');
-% ylabel('Difference ->');
+
 %% PROCESS EDGES IN VERTICAL DIRECTION
 difference = 0;
 total_sum = 0;
@@ -191,12 +139,7 @@ end
 total_sum = total_sum + sum;
 end
 average = total_sum / rows;
-% figure(5)
-% subplot(2,1,1);
-% plot (vert1);
-% title('Vertical Edge Processing Histogram');
-% xlabel('Row Number ->');
-% ylabel('Difference ->');
+
 %% Smoothen the Vertical Histogram by applying Low Pass Filter
 disp('Passing Vertical Histogram through Low Pass Filter...');
 sum = 0;
@@ -208,11 +151,7 @@ sum = sum + vert1(j);
 end
 vert(i) = sum / 41;
 end
-% subplot(2,1,2);
-% plot (vert);
-% title('Histogram after passing through Low Pass Filter');
-% xlabel('Row Number ->');
-% ylabel('Difference ->');
+
 %% Filter out Vertical Histogram Values by applying Dynamic Threshold
 disp('Filter out Vertical Histogram...');
 for i = 1:rows
@@ -223,12 +162,7 @@ I(i, j) = 0;
 end
 end
 end
-% subplot(3,1,3);
-% figure;
-% plot (vert);
-% title('Histogram after Filtering');
-% xlabel('Row Number ->');
-% ylabel('Difference ->');
+
 
 %% Find Probable candidates for Number Plate
 j = 1;
@@ -353,26 +287,11 @@ else
     logoImage = originalLogo;
 end
     
-% carImage=rgb2gray(F);
-
-% title('Image of a Cluttered desk scene');
 
 
 logoBoxPoints = detectSURFFeatures(logoImage);
 carBoxPoints = detectSURFFeatures(carImage);
 
-% figure;
-% imshow(logoImage);
-% title('50 Strongest Feature Points from the Pads box Image');
-% hold on;
-% 
-% plot(selectStrongest(logoBoxPoints, 400));
-% 
-% figure;
-% imshow(carImage);
-% title('400 Strongest Feature Points from Scene Image');
-% hold on;
-% plot(selectStrongest(carBoxPoints, 400));
 
 
 [carboxFeatures, carboxPoints] = extractFeatures(logoImage, logoBoxPoints); %caboxFeatures su Feature vektori tj. deskriptori a carboxPoints su njihove lokacije
@@ -438,10 +357,7 @@ end
 %#############################################################
 originalLogo = imread('audiRealLogo.jpg') ;
 logoImage = rgb2gray(originalLogo);
-% figure;
-% imshow(logoImage);
 
-% title('Image of a Pads box');
 
 [rows, columns, numberOfColorChannels] = size(originalLogo);
 if numberOfColorChannels > 1
@@ -450,26 +366,12 @@ else
     % It's already gray scale.  No need to convert.
     logoImage = originalLogo;
 end
-% figure;
-% imshow(carImage);
-% title('Image of a Cluttered desk scene');
 
 
 logoBoxPoints = detectSURFFeatures(logoImage);
 carBoxPoints = detectSURFFeatures(carImage);
 
-% figure;
-% imshow(logoImage);
-% title('50 Strongest Feature Points from the Pads box Image');
-% hold on;
-% 
-% plot(selectStrongest(logoBoxPoints, 400));
-% 
-% figure;
-% imshow(carImage);
-% title('400 Strongest Feature Points from Scene Image');
-% hold on;
-% plot(selectStrongest(carBoxPoints, 400));
+
 
 
 [carboxFeatures, carboxPoints] = extractFeatures(logoImage, logoBoxPoints); %caboxFeatures su Feature vektori tj. deskriptori a carboxPoints su njihove lokacije
@@ -536,10 +438,6 @@ end
 %################################################################
 originalLogo = imread('skodaRealLogo.jpg') ;
 logoImage = rgb2gray(originalLogo);
-% figure;
-%  imshow(logoImage);
-
-% title('Image of a Pads box');
 
 [rows, columns, numberOfColorChannels] = size(originalLogo);
 if numberOfColorChannels > 1
@@ -548,26 +446,13 @@ else
     % It's already gray scale.  No need to convert.
     logoImage = originalLogo;
 end
-% figure;
-% imshow(carImage);
-% title('Image of a Cluttered desk scene');
+
 
 
 logoBoxPoints = detectSURFFeatures(logoImage);
 carBoxPoints = detectSURFFeatures(carImage);
 
-% figure;
-% imshow(logoImage);
-% title('50 Strongest Feature Points from the Pads box Image');
-% hold on;
-% 
-% plot(selectStrongest(logoBoxPoints, 400));
-% 
-% figure;
-% imshow(carImage);
-% title('400 Strongest Feature Points from Scene Image');
-% hold on;
-% plot(selectStrongest(carBoxPoints, 400));
+
 
 
 [carboxFeatures, carboxPoints] = extractFeatures(logoImage, logoBoxPoints); %caboxFeatures su Feature vektori tj. deskriptori a carboxPoints su njihove lokacije
@@ -653,18 +538,7 @@ end
 logoBoxPoints = detectSURFFeatures(logoImage);
 carBoxPoints = detectSURFFeatures(carImage);
 
-% figure;
-% imshow(logoImage);
-% title('50 Strongest Feature Points from the Pads box Image');
-% hold on;
-% 
-% plot(selectStrongest(logoBoxPoints, 400));
-% 
-% figure;
-% imshow(carImage);
-% title('400 Strongest Feature Points from Scene Image');
-% hold on;
-% plot(selectStrongest(carBoxPoints, 400));
+
 
 
 [carboxFeatures, carboxPoints] = extractFeatures(logoImage, logoBoxPoints); %caboxFeatures su Feature vektori tj. deskriptori a carboxPoints su njihove lokacije
@@ -731,10 +605,6 @@ end
 %##############################################CITROEN#########################
 originalLogo = imread('citroenRealLogo.jpg') ;
 logoImage = rgb2gray(originalLogo);
-% figure;
-% imshow(logoImage);
-
-% title('Image of a Pads box');
 
 [rows, columns, numberOfColorChannels] = size(originalLogo);
 if numberOfColorChannels > 1
@@ -743,26 +613,12 @@ else
     % It's already gray scale.  No need to convert.
     logoImage = originalLogo;
 end
-% figure;
-% imshow(carImage);
-% title('Image of a Cluttered desk scene');
 
 
 logoBoxPoints = detectSURFFeatures(logoImage);
 carBoxPoints = detectSURFFeatures(carImage);
 
-% figure;
-% imshow(logoImage);
-% title('50 Strongest Feature Points from the Pads box Image');
-% hold on;
-% 
-% plot(selectStrongest(logoBoxPoints, 400));
-% 
-% figure;
-% imshow(carImage);
-% title('400 Strongest Feature Points from Scene Image');
-% hold on;
-% plot(selectStrongest(carBoxPoints, 400));
+
 
 
 [carboxFeatures, carboxPoints] = extractFeatures(logoImage, logoBoxPoints); %caboxFeatures su Feature vektori tj. deskriptori a carboxPoints su njihove lokacije
@@ -828,10 +684,6 @@ end
 %###############################################################FiAT########
 originalLogo = imread('fiatRealLogo.jpg') ;
 logoImage = rgb2gray(originalLogo);
-% figure;
-% imshow(logoImage);
-
-% title('Image of a Pads box');
 
 [rows, columns, numberOfColorChannels] = size(originalLogo);
 if numberOfColorChannels > 1
@@ -840,26 +692,12 @@ else
     % It's already gray scale.  No need to convert.
     logoImage = originalLogo;
 end
-% figure;
-% imshow(carImage);
-% title('Image of a Cluttered desk scene');
 
 
 logoBoxPoints = detectSURFFeatures(logoImage);
 carBoxPoints = detectSURFFeatures(carImage);
 
-% figure;
-% imshow(logoImage);
-% title('50 Strongest Feature Points from the Pads box Image');
-% hold on;
-% 
-% plot(selectStrongest(logoBoxPoints, 400));
-% 
-% figure;
-% imshow(carImage);
-% title('400 Strongest Feature Points from Scene Image');
-% hold on;
-% plot(selectStrongest(carBoxPoints, 400));
+
 
 
 [carboxFeatures, carboxPoints] = extractFeatures(logoImage, logoBoxPoints); %caboxFeatures su Feature vektori tj. deskriptori a carboxPoints su njihove lokacije
@@ -924,10 +762,7 @@ end
 %#######################################################################
 originalLogo = imread('mazdaRealLogo.jpg') ;
 logoImage = rgb2gray(originalLogo);
-% figure;
-% imshow(logoImage);
 
-% title('Image of a Pads box');
 
 [rows, columns, numberOfColorChannels] = size(originalLogo);
 if numberOfColorChannels > 1
@@ -936,26 +771,13 @@ else
     % It's already gray scale.  No need to convert.
    logoImage = originalLogo;
 end
-% figure;
-% imshow(carImage);
-% title('Image of a Cluttered desk scene');
+
 
 
 logoBoxPoints = detectSURFFeatures(logoImage);
 carBoxPoints = detectSURFFeatures(carImage);
 
-% figure;
-% imshow(logoImage);
-% title('50 Strongest Feature Points from the Pads box Image');
-% hold on;
-% 
-% plot(selectStrongest(logoBoxPoints, 400));
-% 
-% figure;
-% imshow(carImage);
-% title('400 Strongest Feature Points from Scene Image');
-% hold on;
-% plot(selectStrongest(carBoxPoints, 400));
+
 
 
 [carboxFeatures, carboxPoints] = extractFeatures(logoImage, logoBoxPoints); %caboxFeatures su Feature vektori tj. deskriptori a carboxPoints su njihove lokacije
@@ -1022,10 +844,6 @@ end
     %#######################################################################
 originalLogo = imread('nissanRealLogo.jpg') ;
 logoImage = rgb2gray(originalLogo);
-% figure;
-% imshow(logoImage);
-
-% title('Image of a Pads box');
 
 [rows, columns, numberOfColorChannels] = size(originalLogo);
 if numberOfColorChannels > 1
@@ -1034,26 +852,13 @@ else
     % It's already gray scale.  No need to convert.
     logoImage = originalLogo;
 end
-% figure;
-% imshow(carImage);
-% title('Image of a Cluttered desk scene');
+
 
 
 logoBoxPoints = detectSURFFeatures(logoImage);
 carBoxPoints = detectSURFFeatures(carImage);
 
-% figure;
-% imshow(logoImage);
-% title('50 Strongest Feature Points from the Pads box Image');
-% hold on;
-% 
-% plot(selectStrongest(logoBoxPoints, 400));
-% 
-% figure;
-% imshow(carImage);
-% title('400 Strongest Feature Points from Scene Image');
-% hold on;
-% plot(selectStrongest(carBoxPoints, 400));
+
 
 
 [carboxFeatures, carboxPoints] = extractFeatures(logoImage, logoBoxPoints); %caboxFeatures su Feature vektori tj. deskriptori a carboxPoints su njihove lokacije
@@ -1119,10 +924,6 @@ end
     %#######################################################################
 originalLogo = imread('renaultRealLogo.jpg') ;
 logoImage = rgb2gray(originalLogo);
-% figure;
-% imshow(logoImage);
-
-% title('Image of a Pads box');
 
 [rows, columns, numberOfColorChannels] = size(originalLogo);
 if numberOfColorChannels > 1
@@ -1131,26 +932,13 @@ else
     % It's already gray scale.  No need to convert.
     logoImage = originalLogo;
 end
-% figure;
-% imshow(carImage);
-% title('Image of a Cluttered desk scene');
+
 
 
 logoBoxPoints = detectSURFFeatures(logoImage);
 carBoxPoints = detectSURFFeatures(carImage);
 
-% figure;
-% imshow(logoImage);
-% title('50 Strongest Feature Points from the Pads box Image');
-% hold on;
-% 
-% plot(selectStrongest(logoBoxPoints, 400));
-% 
-% figure;
-% imshow(carImage);
-% title('400 Strongest Feature Points from Scene Image');
-% hold on;
-% plot(selectStrongest(carBoxPoints, 400));
+
 
 
 [carboxFeatures, carboxPoints] = extractFeatures(logoImage, logoBoxPoints); %caboxFeatures su Feature vektori tj. deskriptori a carboxPoints su njihove lokacije
@@ -1217,10 +1005,7 @@ end
     %#######################################################################
 originalLogo = imread('toyotaRealLogo.jpg') ;
 logoImage = rgb2gray(originalLogo);
-% figure;
-% imshow(logoImage);
 
-% title('Image of a Pads box');
 
 [rows, columns, numberOfColorChannels] = size(originalLogo);
 if numberOfColorChannels > 1
@@ -1229,26 +1014,11 @@ else
     % It's already gray scale.  No need to convert.
     logoImage = originalLogo;
 end
-% figure;
-% imshow(carImage);
-% title('Image of a Cluttered desk scene');
 
 
 logoBoxPoints = detectSURFFeatures(logoImage);
 carBoxPoints = detectSURFFeatures(carImage);
 
-% figure;
-% imshow(logoImage);
-% title('50 Strongest Feature Points from the Pads box Image');
-% hold on;
-% 
-% plot(selectStrongest(logoBoxPoints, 400));
-% 
-% figure;
-% imshow(carImage);
-% title('400 Strongest Feature Points from Scene Image');
-% hold on;
-% plot(selectStrongest(carBoxPoints, 400));
 
 
 [carboxFeatures, carboxPoints] = extractFeatures(logoImage, logoBoxPoints); %caboxFeatures su Feature vektori tj. deskriptori a carboxPoints su njihove lokacije
@@ -1311,9 +1081,7 @@ end
     
     pairedDotToyota=size(boxPairsToyota,1);
     
-% averageBoxPairsOpel = mean2(boxPairsOpel);
-% averageBoxPairsAudi = mean2(boxPairsAudi);
-% averageBoxPairsSkoda = mean2(boxPairsSkoda
+
 
 
 
